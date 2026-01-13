@@ -83,11 +83,10 @@ class Tree {
       }
     }
 
-    return "Not in tree";
+    throw new Error("Not in Tree");
   }
 
   levelOrderForEach(callback) {
-    console.log(callback);
     if (typeof callback !== "function") {
       throw new Error("Callback Required");
     }
@@ -151,6 +150,27 @@ class Tree {
     this.postOrderForEach(callback, node.right);
     callback(node);
   }
+
+  height(value) {
+    let node = this.find(value);
+  }
+
+  depth(value, node = this.root) {
+    let total = 0;
+    while (node) {
+      if (node.data === value) {
+        return total;
+      }
+
+      if (node.data > value) {
+        total++;
+        node = node.left;
+      } else {
+        total++;
+        node = node.right;
+      }
+    }
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -171,8 +191,8 @@ const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const tree = new Tree(array);
 
+tree.insert(400);
+
 prettyPrint(tree.root);
 
-tree.postOrderForEach((val) => {
-  console.log(val.data);
-});
+console.log(tree.depth(7));
