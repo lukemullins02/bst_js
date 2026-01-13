@@ -170,6 +170,8 @@ class Tree {
         node = node.right;
       }
     }
+
+    throw new Error("Not in Tree");
   }
 }
 
