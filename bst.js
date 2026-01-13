@@ -1,5 +1,5 @@
 class Node {
-  constructor(data, left = null, right = null) {
+  constructor(data = null, left = null, right = null) {
     this.data = data;
     this.left = left;
     this.right = right;
@@ -83,7 +83,7 @@ class Tree {
       }
     }
 
-    throw new Error("Not in Tree");
+    return null;
   }
 
   levelOrderForEach(callback) {
@@ -152,7 +152,14 @@ class Tree {
   }
 
   height(value) {
-    let node = this.find(value);
+    const node = this.find(value);
+
+    const findHeight = (node) => {
+      if (node === null) return -1;
+      return 1 + Math.max(findHeight(node.left), findHeight(node.right));
+    };
+
+    return findHeight(node);
   }
 
   depth(value, node = this.root) {
@@ -207,6 +214,8 @@ const tree = new Tree(array);
 
 tree.insert(400);
 
-tree.rebalance();
+tree.insert(6346);
+
+console.log(tree.height(4));
 
 prettyPrint(tree.root);
