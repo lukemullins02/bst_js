@@ -162,6 +162,20 @@ class Tree {
     return findHeight(node);
   }
 
+  findHeight(node) {
+    if (node === null) return -1;
+    return (
+      1 + Math.max(this.findHeight(node.left), this.findHeight(node.right))
+    );
+  }
+
+  findMinHeight(node) {
+    if (node === null) return -1;
+    return (
+      1 + Math.min(this.findHeight(node.left), this.findHeight(node.right))
+    );
+  }
+
   depth(value, node = this.root) {
     let total = 0;
     while (node) {
@@ -179,6 +193,34 @@ class Tree {
     }
 
     throw new Error("Not in Tree");
+  }
+
+  isBalanced(node = this.root) {
+    if (node === null) return;
+
+    console.log(
+      node.data,
+      this.findHeight(node.left),
+      this.findHeight(node.right),
+      this.findMinHeight(node.left),
+      this.findMinHeight(node.right)
+    );
+
+    if (
+      this.findHeight(node.left) - this.findMinHeight(node.right) >= 2 ||
+      this.findHeight(node.right) - this.findMinHeight(node.left) >= 2
+    ) {
+      return false;
+    }
+
+    const left_val = this.isBalanced(node.left);
+    const right_val = this.isBalanced(node.right);
+
+    if (left_val === false || right_val === false) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   rebalance() {
@@ -210,12 +252,24 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
-const tree = new Tree(array);
+const arr2 = [10, 11, 12, 13];
 
-tree.insert(400);
+const tree = new Tree(arr2);
 
-tree.insert(6346);
+tree.insert(9);
+tree.insert(8);
 
-console.log(tree.height(4));
+tree.rebalance();
+
+tree.insert(14);
+tree.insert(7);
+tree.insert(16);
+tree.insert(15);
+
+tree.rebalance();
+
+tree.insert(17);
+
+console.log(tree.isBalanced());
 
 prettyPrint(tree.root);
