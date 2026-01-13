@@ -103,18 +103,6 @@ class Tree {
     }
   }
 
-  inOrderForEach(callback, node = this.root) {
-    if (typeof callback !== "function") {
-      throw new Error("Callback Required");
-    }
-
-    if (node == null) return;
-
-    callback(node);
-    this.preOrderForEach(callback, node.left);
-    this.preOrderForEach(callback, node.right);
-  }
-
   preOrderForEach(callback, node = this.root) {
     if (typeof callback !== "function") {
       throw new Error("Callback Required");
@@ -198,14 +186,6 @@ class Tree {
   isBalanced(node = this.root) {
     if (node === null) return;
 
-    console.log(
-      node.data,
-      this.findHeight(node.left),
-      this.findHeight(node.right),
-      this.findMinHeight(node.left),
-      this.findMinHeight(node.right)
-    );
-
     if (
       this.findHeight(node.left) - this.findMinHeight(node.right) >= 2 ||
       this.findHeight(node.right) - this.findMinHeight(node.left) >= 2
@@ -236,40 +216,4 @@ class Tree {
   }
 }
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
-  if (node === null) {
-    return;
-  }
-
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-  }
-};
-
-const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-
-const arr2 = [10, 11, 12, 13];
-
-const tree = new Tree(arr2);
-
-tree.insert(9);
-tree.insert(8);
-
-tree.rebalance();
-
-tree.insert(14);
-tree.insert(7);
-tree.insert(16);
-tree.insert(15);
-
-tree.rebalance();
-
-tree.insert(17);
-
-console.log(tree.isBalanced());
-
-prettyPrint(tree.root);
+export default Tree;
