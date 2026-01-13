@@ -85,6 +85,72 @@ class Tree {
 
     return "Not in tree";
   }
+
+  levelOrderForEach(callback) {
+    console.log(callback);
+    if (typeof callback !== "function") {
+      throw new Error("Callback Required");
+    }
+
+    if (this.root == null) return;
+    let queue = [];
+    queue.push(this.root);
+
+    while (queue.length !== 0) {
+      let cur = queue[0];
+      if (cur.left != null) queue.push(cur.left);
+      if (cur.right != null) queue.push(cur.right);
+      callback(queue.shift());
+    }
+  }
+
+  inOrderForEach(callback, node = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback Required");
+    }
+
+    if (node == null) return;
+
+    callback(node);
+    this.preOrderForEach(callback, node.left);
+    this.preOrderForEach(callback, node.right);
+  }
+
+  preOrderForEach(callback, node = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback Required");
+    }
+
+    if (node == null) return;
+
+    callback(node);
+    this.preOrderForEach(callback, node.left);
+    this.preOrderForEach(callback, node.right);
+  }
+
+  inOrderForEach(callback, node = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback Required");
+    }
+
+    if (node == null) return;
+
+    this.inOrderForEach(callback, node.left);
+    callback(node);
+    this.inOrderForEach(callback, node.right);
+  }
+
+  postOrderForEach(callback, node = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("Callback Required");
+    }
+
+    if (node == null) return;
+
+    this.postOrderForEach(callback, node.left);
+    this.postOrderForEach(callback, node.right);
+    callback(node);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -104,3 +170,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const tree = new Tree(array);
+
+prettyPrint(tree.root);
+
+tree.postOrderForEach((val) => {
+  console.log(val.data);
+});
