@@ -173,6 +173,18 @@ class Tree {
 
     throw new Error("Not in Tree");
   }
+
+  rebalance() {
+    let newArr = [];
+
+    this.postOrderForEach((val) => {
+      newArr.push(val.data);
+    });
+
+    newArr = [...new Set(newArr)].sort((a, b) => a - b);
+    this.arr = newArr;
+    this.root = this.buildTree(this.arr);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -195,6 +207,6 @@ const tree = new Tree(array);
 
 tree.insert(400);
 
-prettyPrint(tree.root);
+tree.rebalance();
 
-console.log(tree.depth(7));
+prettyPrint(tree.root);
