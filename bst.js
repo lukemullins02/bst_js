@@ -27,6 +27,64 @@ class Tree {
 
     return root;
   }
+
+  insert(value, node = this.root) {
+    if (node === null) return new Node(value);
+
+    if (node.data === value) {
+      throw new Error("Value already in tree");
+    }
+
+    if (value < node.data) {
+      node.left = this.insert(value, node.left);
+    } else {
+      node.right = this.insert(value, node.right);
+    }
+
+    return node;
+  }
+
+  delete(value, node = this.root) {
+    if (node === null) {
+      return node;
+    }
+
+    if (node.data > value) {
+      node.left = this.delete(value, node.left);
+    } else if (node.data < value) {
+      node.right = this.delete(value, node.right);
+    } else {
+      if (node.left === null) {
+        return node.right;
+      }
+      if (node.right === null) {
+        return node.left;
+      }
+
+      let succ = node.right;
+
+      while (succ !== null && succ.left !== null) succ = succ.left;
+      node.data = succ.data;
+      node.right = this.delete(succ.data, node.right);
+    }
+    return node;
+  }
+
+  find(value, node = this.root) {
+    while (node) {
+      if (node.data === value) {
+        return node;
+      }
+
+      if (node.data > value) {
+        node = node.left;
+      } else {
+        node = node.right;
+      }
+    }
+
+    return "Not in tree";
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -46,5 +104,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const tree = new Tree(array);
-
-prettyPrint(tree.root);
